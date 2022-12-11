@@ -1,0 +1,7 @@
+{
+  "home": "בית",
+  "language_one": "{{count}} שפה",
+  "language_two": "{{count}} שפות",
+  "language_other": "{{count}} שפות",
+  "language_zero": "אין שפות"
+}
