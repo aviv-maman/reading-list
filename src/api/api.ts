@@ -1,11 +1,13 @@
 import axios from 'axios';
+import db from '../firebase/firebaseConfig';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 
 export type Book = {
   id: string;
-  author: string;
+  // author: string;
   title: string;
-  publishedYear: number;
-  genres: string[];
+  // publishedYear: number;
+  // genres: string[];
 };
 
 export type ServerResponse = {
@@ -23,27 +25,26 @@ export type Query = {
 };
 
 export type ApiClient = {
-  getBooks: (query?: string) => Promise<Book[]>;
+  getBooks: (query?: Query) => Promise<Book[]> | PromiseLike<Book[]> | unknown;
   getBookById: (bookId: string) => Promise<Book>;
   createBook: (formData: any) => Promise<Book>;
 };
 
 export const createApiClient = (): ApiClient => {
   return {
-    getBooks: async (query) => {
+    getBooks: async (queryObject?: Query) => {
       const controller = new AbortController();
       try {
-        // const res = await axios.get(`http://localhost:5000/books`, {
-        // params: query,
-        const res = await axios.get(`http://localhost:5000/books?q=${query}`, {
-          signal: controller.signal,
-        });
-        return res.data;
+        // const wantedQuery = query(ref, where('title', '==', queryObject?.q));
+        const collectionRef = collection(db, 'books');
+        const snapshot = await getDocs(collectionRef);
+        const books = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id } as Book));
+        return books;
       } catch (error) {
-        if (axios.isCancel(error)) {
-          console.log('the request was cancelled', error.message);
+        if (controller.signal.aborted) {
+          console.log('the request was cancelled:', controller.signal.reason);
         } else {
-          console.log('Could not fetch the data');
+          console.log('Could not fetch the data.');
           return error;
         }
       }

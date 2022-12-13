@@ -1,29 +1,23 @@
-import { useState } from 'react';
 import BookList from '../components/BookList';
 import BookForm from '../components/BookForm';
 import { LoaderFunctionArgs, useRouteLoaderData } from 'react-router-dom';
 import { Book, createApiClient } from '../api/api';
+import { useCollection } from '../hooks/useCollection';
 
+//API calls
 const api = createApiClient();
 
 export async function loader({ request }: LoaderFunctionArgs): Promise<any> {
-  const url = new URL(request.url);
-  const q = url.searchParams.get('q') ?? '';
-  const fetchedBooks = await api.getBooks(q);
-  // const res = await fetch(newUrl, { signal: request.signal });
-  // const myData = await res.json();
-  // return myData;
-  return { fetchedBooks, q };
+  // const url = new URL(request.url);
+  // const q = url.searchParams.get('q') ?? '';
+  // const fetchedBooks = await api.getBooks({ q });
+  // return { fetchedBooks, q };
+  return null;
 }
 
 export default function HomePage() {
-  const { fetchedBooks }: any = useRouteLoaderData('root');
-  const [books, setBooks] = useState<Book[]>([
-    { title: 'the name of the wind', id: '1', author: 'x', publishedYear: 2022, genres: ['a', 'b'] },
-    { title: 'the dragon reborn', id: '2', author: 'x', publishedYear: 2022, genres: ['a', 'b'] },
-    { title: 'the final empire', id: '3', author: 'x', publishedYear: 2022, genres: ['a', 'b'] },
-    { title: 'the way of kings', id: '4', author: 'x', publishedYear: 2022, genres: ['a', 'b'] },
-  ]);
+  // const { fetchedBooks }: any = useRouteLoaderData('root'); //loader function: not real time data
+  const books: Book[] = useCollection('books');
 
   return (
     <div className='App'>
