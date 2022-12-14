@@ -1,6 +1,6 @@
 import axios from 'axios';
 import db from '../firebase/firebaseConfig';
-import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
 
 export type Book = {
   id: string;
@@ -28,6 +28,7 @@ export type ApiClient = {
   getBooks: (query?: Query) => Promise<Book[]> | PromiseLike<Book[]> | unknown;
   getBookById: (bookId: string) => Promise<Book>;
   addBook: (formData: any) => Promise<any>;
+  deleteDocById: (bookId: string) => Promise<any>;
 };
 
 export const createApiClient = (): ApiClient => {
@@ -66,6 +67,22 @@ export const createApiClient = (): ApiClient => {
           console.log('the request was cancelled:', controller.signal.reason);
         } else {
           console.log('There was a problem with adding the document.');
+          return error;
+        }
+      }
+      return () => controller.abort();
+    },
+    deleteDocById: async (docId: string) => {
+      const controller = new AbortController();
+      try {
+        const docRef = doc(db, 'books', docId);
+        await deleteDoc(docRef);
+        return { message: 'A document was successfully deleted.', id: docId };
+      } catch (error) {
+        if (controller.signal.aborted) {
+          console.log('The request was cancelled:', controller.signal.reason);
+        } else {
+          console.log('There was a problem with deleting the document.');
           return error;
         }
       }
