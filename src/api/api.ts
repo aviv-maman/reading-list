@@ -1,5 +1,5 @@
 import axios from 'axios';
-import db from '../firebase/firebaseConfig';
+import { db } from '../firebase/firebaseConfig';
 import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
 
 export type Book = {

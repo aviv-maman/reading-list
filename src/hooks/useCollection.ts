@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 //Firebase
-import db from '../firebase/firebaseConfig';
+import { db } from '../firebase/firebaseConfig';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 
 export const useCollection = (collectionName: string) => {
