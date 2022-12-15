@@ -1,4 +1,4 @@
-//Custom hook for real time data from firestore
+// *Custom hook for real time data from firestore*
 
 import { useEffect, useState } from 'react';
 //Firebase
@@ -11,7 +11,7 @@ export const useCollection = (collectionName: string) => {
   useEffect(() => {
     const collectionRef = collection(db, collectionName);
     const unsubscribe = onSnapshot(collectionRef, (snapshot) => {
-      let returnedDocuments: any[] = [];
+      const returnedDocuments: any[] = [];
       snapshot.docs.forEach((doc) => {
         returnedDocuments.push({ ...doc.data(), id: doc.id });
       });

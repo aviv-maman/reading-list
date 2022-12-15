@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { db } from '../firebase/firebaseConfig';
+import { auth, db } from '../firebase/firebaseConfig';
 import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
+import { createUserWithEmailAndPassword, User } from 'firebase/auth';
 
 export type Book = {
   id: string;
@@ -24,11 +25,17 @@ export type Query = {
   page?: number;
 };
 
+export type SignUp = {
+  email: string;
+  password: string;
+};
+
 export type ApiClient = {
   getBooks: (query?: Query) => Promise<Book[]> | PromiseLike<Book[]> | unknown;
   getBookById: (bookId: string) => Promise<Book>;
   addBook: (formData: any) => Promise<any>;
   deleteDocById: (bookId: string) => Promise<any>;
+  signUp: (formData: SignUp) => Promise<{ message: string; user: User }>;
 };
 
 export const createApiClient = (): ApiClient => {
@@ -83,6 +90,22 @@ export const createApiClient = (): ApiClient => {
           console.log('The request was cancelled:', controller.signal.reason);
         } else {
           console.log('There was a problem with deleting the document.');
+          return error;
+        }
+      }
+      return () => controller.abort();
+    },
+    signUp: async (formData: SignUp) => {
+      const controller = new AbortController();
+      const { email, password } = formData;
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        return { message: 'A user was successfully signed up.', user: userCredential.user };
+      } catch (error: any) {
+        if (controller.signal.aborted) {
+          console.log('The request was cancelled:', controller.signal.reason);
+        } else {
+          console.log('There was a problem with signing up.');
           return error;
         }
       }
