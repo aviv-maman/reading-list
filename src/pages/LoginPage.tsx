@@ -14,7 +14,7 @@ export default function LoginPage() {
     setError('');
     try {
       const res = await api.logIn({ email, password });
-      if (res.status === 201) {
+      if (res.status === 200) {
         console.log(`A user logged in: ${res.user}`);
       } else {
         throw new Error(`${res.code}: ${res.message}`);
