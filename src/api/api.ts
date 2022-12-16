@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { auth, db } from '../firebase/firebaseConfig';
 import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
-import { createUserWithEmailAndPassword, User } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User } from 'firebase/auth';
 
 export type Book = {
   id: string;
@@ -30,12 +30,19 @@ export type SignUp = {
   password: string;
 };
 
+export type LogIn = {
+  email: string;
+  password: string;
+};
+
 export type ApiClient = {
   getBooks: (query?: Query) => Promise<Book[]> | PromiseLike<Book[]> | unknown;
   getBookById: (bookId: string) => Promise<Book>;
   addBook: (formData: any) => Promise<any>;
   deleteDocById: (bookId: string) => Promise<any>;
   signUp: (formData: SignUp) => Promise<{ message: string; user: User }> | any;
+  logOut: () => void;
+  logIn: (formData: LogIn) => Promise<{ message: string; user: User }> | any;
 };
 
 export const createApiClient = (): ApiClient => {
@@ -106,6 +113,37 @@ export const createApiClient = (): ApiClient => {
           console.log('The request was cancelled:', controller.signal.reason);
         } else {
           console.log('There was a problem with signing up.');
+          return { message: error.message, code: error.code };
+        }
+      }
+      return () => controller.abort();
+    },
+    logOut: async () => {
+      const controller = new AbortController();
+      try {
+        await signOut(auth);
+        return { message: 'A user was successfully signed up.' };
+      } catch (error: any) {
+        if (controller.signal.aborted) {
+          console.log('The request was cancelled:', controller.signal.reason);
+        } else {
+          console.log('There was a problem with signing up.');
+          return { message: error.message, code: error.code };
+        }
+      }
+      return () => controller.abort();
+    },
+    logIn: async (formData: LogIn) => {
+      const controller = new AbortController();
+      const { email, password } = formData;
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        return { message: 'A user was successfully logged in.', user: userCredential.user };
+      } catch (error: any) {
+        if (controller.signal.aborted) {
+          console.log('The request was cancelled:', controller.signal.reason);
+        } else {
+          console.log('There was a problem with login.');
           return { message: error.message, code: error.code };
         }
       }

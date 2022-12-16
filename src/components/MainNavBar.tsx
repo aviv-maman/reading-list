@@ -1,5 +1,8 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
+import { createApiClient } from '../api/api';
+
+//API calls
+const api = createApiClient();
 
 export default function MainNavBar() {
   return (
@@ -15,7 +18,7 @@ export default function MainNavBar() {
         <li>
           <Link to='/signup'>Sign Up</Link>
         </li>
-        <li>Logout</li>
+        <li onClick={api.logOut}>Logout</li>
       </ul>
     </nav>
   );
