@@ -1,16 +1,19 @@
 import { useContext, createContext, Dispatch, useReducer } from 'react';
 import { GlobalActionMap } from './action';
 import { english, Language } from '../languages';
-import { globalReducer } from './reducer';
+import { globalReducer } from './globalReducer';
+import type { User as FirebaseUser } from 'firebase/auth';
 
-export type User = {
-  email: string;
-  firstName: string;
-  lastName: string;
-  bio: string;
-  height: number;
-  weight: number;
-};
+export type User =
+  | {
+      email: string;
+      firstName: string;
+      lastName: string;
+      bio: string;
+      height: number;
+      weight: number;
+    }
+  | FirebaseUser;
 
 console.log('initial.ts');
 

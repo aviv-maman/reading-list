@@ -14,8 +14,8 @@ export default function SignUpPage() {
     setError('');
     try {
       const res = await api.signUp({ email, password });
-      if (res.status === 201) {
-        console.log(`A user signed up: ${res.user}`);
+      if (res.status === 200) {
+        console.log(`A user signed up: ${res.user.email}`);
       } else {
         throw new Error(`${res.code}: ${res.message}`);
       }

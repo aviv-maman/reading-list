@@ -1,5 +1,8 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { createApiClient } from '../api/api';
+import { GlobalActionKeys } from '../core/context/action';
+import { useGlobalContext } from '../core/context/initialContextState';
 
 //API calls
 const api = createApiClient();
@@ -9,13 +12,18 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  const navigate = useNavigate();
+  const { dispatch } = useGlobalContext();
+
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setError('');
     try {
       const res = await api.logIn({ email, password });
-      if (res.status === 200) {
-        console.log(`A user logged in: ${res.user}`);
+      console.log(res);
+      if (res.user.email) {
+        dispatch({ type: GlobalActionKeys.UpdateUser, payload: res.user });
+        navigate('/home');
       } else {
         throw new Error(`${res.code}: ${res.message}`);
       }

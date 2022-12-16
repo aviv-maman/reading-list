@@ -1,4 +1,4 @@
-import type { User } from './initial';
+import type { User } from './initialContextState';
 import type { Language } from '../languages';
 
 type ActionMap<M extends { [index: string]: any }> = {

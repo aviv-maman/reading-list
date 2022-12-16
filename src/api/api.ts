@@ -41,7 +41,7 @@ export type ApiClient = {
   addBook: (formData: any) => Promise<any>;
   deleteDocById: (bookId: string) => Promise<any>;
   signUp: (formData: SignUp) => Promise<{ message: string; user: User }> | any;
-  logOut: () => void;
+  logOut: () => { message: string } | any;
   logIn: (formData: LogIn) => Promise<{ message: string; user: User }> | any;
 };
 
