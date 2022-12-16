@@ -15,7 +15,6 @@ function App() {
       <Route path='/' id='root' element={<RootLayout />} loader={rootLoader} errorElement={<ErrorPage />}>
         <Route errorElement={<ErrorPage />}>
           <Route index element={<HomePage />} />
-
           <Route path='/' element={<AuthorizedRoute requireGuest />}>
             <Route
               path='signup'

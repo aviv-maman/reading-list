@@ -10,7 +10,7 @@ const api = createApiClient();
 
 export default function MainNavBar() {
   const navigate = useNavigate();
-  const { dispatch } = useGlobalContext();
+  const { state, dispatch } = useGlobalContext();
 
   const handleLogout = () => {
     try {
@@ -28,19 +28,30 @@ export default function MainNavBar() {
   };
 
   return (
-    <nav>
+    <nav style={{ background: state.siteTheme === 'dark' ? 'darkblue' : 'aliceblue', color: state.siteTheme === 'dark' ? 'lightgray' : 'darkgray' }}>
       <h1>My Reading List</h1>
       <ul>
         <li>
-          <Link to='/'>Home</Link>
+          <Link style={{ color: state.siteTheme === 'dark' ? 'lightgray' : 'midnightblue' }} to='/'>
+            Home
+          </Link>
         </li>
-        <li>
-          <Link to='/login'>Login</Link>
-        </li>
-        <li>
-          <Link to='/signup'>Sign Up</Link>
-        </li>
-        <li onClick={handleLogout}>Logout</li>
+        {state.user ? (
+          <>
+            <li>
+              <Link style={{ color: state.siteTheme === 'dark' ? 'lightgray' : 'midnightblue' }} to='/login'>
+                Login
+              </Link>
+            </li>
+            <li>
+              <Link style={{ color: state.siteTheme === 'dark' ? 'lightgray' : 'midnightblue' }} to='/signup'>
+                Sign Up
+              </Link>
+            </li>
+          </>
+        ) : (
+          <li onClick={handleLogout}>Logout</li>
+        )}
       </ul>
       <ThemeSelector />
       <LanguageDropdown />
