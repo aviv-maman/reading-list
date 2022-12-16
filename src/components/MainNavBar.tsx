@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { createApiClient } from '../api/api';
 import { GlobalActionKeys } from '../core/context/action';
 import { useGlobalContext } from '../core/context/initialContextState';
@@ -32,21 +32,24 @@ export default function MainNavBar() {
       <h1>My Reading List</h1>
       <ul>
         <li>
-          <Link style={{ color: state.siteTheme === 'dark' ? 'lightgray' : 'midnightblue' }} to='/'>
+          <NavLink
+            className={({ isActive, isPending }) => (isActive ? 'active brand' : isPending ? 'pending brand' : 'brand')}
+            style={{ color: state.siteTheme === 'dark' ? 'lightgray' : 'midnightblue' }}
+            to='/'>
             Home
-          </Link>
+          </NavLink>
         </li>
-        {state.user ? (
+        {!state.user ? (
           <>
             <li>
-              <Link style={{ color: state.siteTheme === 'dark' ? 'lightgray' : 'midnightblue' }} to='/login'>
+              <NavLink style={{ color: state.siteTheme === 'dark' ? 'lightgray' : 'midnightblue' }} to='/login'>
                 Login
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link style={{ color: state.siteTheme === 'dark' ? 'lightgray' : 'midnightblue' }} to='/signup'>
+              <NavLink style={{ color: state.siteTheme === 'dark' ? 'lightgray' : 'midnightblue' }} to='/signup'>
                 Sign Up
-              </Link>
+              </NavLink>
             </li>
           </>
         ) : (
