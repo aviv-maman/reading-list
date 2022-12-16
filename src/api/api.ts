@@ -35,7 +35,7 @@ export type ApiClient = {
   getBookById: (bookId: string) => Promise<Book>;
   addBook: (formData: any) => Promise<any>;
   deleteDocById: (bookId: string) => Promise<any>;
-  signUp: (formData: SignUp) => Promise<{ message: string; user: User }>;
+  signUp: (formData: SignUp) => Promise<{ message: string; user: User }> | any;
 };
 
 export const createApiClient = (): ApiClient => {
@@ -106,7 +106,7 @@ export const createApiClient = (): ApiClient => {
           console.log('The request was cancelled:', controller.signal.reason);
         } else {
           console.log('There was a problem with signing up.');
-          return error;
+          return { message: error.message, code: error.code };
         }
       }
       return () => controller.abort();

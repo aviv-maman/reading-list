@@ -14,10 +14,13 @@ export default function SignUpPage() {
     setError('');
     try {
       const res = await api.signUp({ email, password });
-      console.log(`A user signed up: ${res.user}`);
+      if (res.status === 201) {
+        console.log(`A user signed up: ${res.user}`);
+      } else {
+        throw new Error(`${res.code}: ${res.message}`);
+      }
     } catch (error: any) {
       setError(error.message);
-      console.log(`Error signing up: ${error.message}`);
     }
   };
 
