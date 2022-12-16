@@ -18,7 +18,7 @@ export default function MainNavBar() {
       console.log(res);
       if (res.message) {
         dispatch({ type: GlobalActionKeys.UpdateUser, payload: null });
-        navigate('/home');
+        navigate('/');
       } else {
         throw new Error(`${res.code}: ${res.message}`);
       }

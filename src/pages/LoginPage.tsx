@@ -23,7 +23,7 @@ export default function LoginPage() {
       console.log(res);
       if (res.user.email) {
         dispatch({ type: GlobalActionKeys.UpdateUser, payload: res.user });
-        navigate('/home');
+        navigate('/');
       } else {
         throw new Error(`${res.code}: ${res.message}`);
       }
