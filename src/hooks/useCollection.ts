@@ -1,6 +1,6 @@
 // *Custom hook for real time data from firestore*
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 //Firebase
 import { db } from '../firebase/firebaseConfig';
 import {
@@ -19,7 +19,7 @@ export const useCollection = <T>(collectionName: string, ...options: CollectionQ
   const [documents, setDocuments] = useState<T[]>([]);
 
   useEffect(() => {
-    let collectionRef = collection(db, collectionName) as CollectionReference<T>;
+    const collectionRef = collection(db, collectionName) as CollectionReference<T>;
 
     const q = query<T>(collectionRef, ...options);
 
