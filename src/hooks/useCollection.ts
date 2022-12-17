@@ -15,10 +15,8 @@ import {
 
 type CollectionQueries = QueryFieldFilterConstraint | QueryLimitConstraint | QueryOrderByConstraint;
 
-export const useCollection = <T>(collectionName: string, ..._options: CollectionQueries[]) => {
+export const useCollection = <T>(collectionName: string, ...options: CollectionQueries[]) => {
   const [documents, setDocuments] = useState<T[]>([]);
-
-  const options = useRef(_options).current;
 
   useEffect(() => {
     let collectionRef = collection(db, collectionName) as CollectionReference<T>;

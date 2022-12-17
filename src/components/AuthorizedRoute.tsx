@@ -2,11 +2,6 @@ import { FC, PropsWithChildren } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useGlobalContext } from '../core/context/initialContextState';
 
-const getCookieValue = (name: string): string | undefined | null => document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop();
-
-const setCookie = (name: string, value: string | null, expires?: string | number) =>
-  (document.cookie = `${name}=${value};path=/;maxAge=${expires || 1000 * 60 * 60 * 24}`);
-
 type AuthorizedRouteProps = PropsWithChildren<{
   requireAuthorization?: boolean;
   requireGuest?: boolean;
