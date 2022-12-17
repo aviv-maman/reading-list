@@ -18,7 +18,7 @@ export async function loader({ request }: LoaderFunctionArgs): Promise<any> {
 
 export default function HomePage() {
   // const { fetchedBooks }: any = useRouteLoaderData('root'); //loader function: not real time data
-  const books = useCollection<Book>('books', [where('title', '==', 'the final empire'), limit(1)]);
+  const books = useCollection<Book>('books', where('title', '==', 'the final empire'), limit(1));
 
   return (
     <div className='App'>
