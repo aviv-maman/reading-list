@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createApiClient } from '../api/api';
-
+import { useGlobalContext } from '../core/context/initialContextState';
 //API calls
 const api = createApiClient();
 
@@ -8,11 +8,15 @@ export default function BookForm() {
   const [newBook, setNewBook] = useState('');
   const [serverResponse, setServerResponse] = useState({ message: '' });
 
+  const { state } = useGlobalContext();
+
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    const res = await api.addBook({ title: newBook });
-    setNewBook('');
-    setServerResponse({ message: res.message });
+    if (state.user) {
+      const res = await api.addBook({ title: newBook, uid: state.user.uid });
+      setNewBook('');
+      setServerResponse({ message: res.message });
+    }
   };
 
   return (

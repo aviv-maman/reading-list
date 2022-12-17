@@ -9,9 +9,11 @@ export type User =
       email: string;
       firstName: string;
       lastName: string;
-      bio: string;
+      phoneNumber: string;
       height: number;
       weight: number;
+      photoURL: string;
+      uid: string;
     }
   | FirebaseUser;
 

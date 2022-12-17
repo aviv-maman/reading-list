@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { auth, db } from '../firebase/firebaseConfig';
-import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User } from 'firebase/auth';
 
 export type Book = {
@@ -37,7 +37,7 @@ export type LogIn = {
 
 export type ApiClient = {
   getBooks: (query?: Query) => Promise<Book[]> | PromiseLike<Book[]> | unknown;
-  getBookById: (bookId: string) => Promise<Book>;
+  getBookById: (bookId: string) => Promise<Book> | unknown;
   addBook: (formData: any) => Promise<any>;
   deleteDocById: (bookId: string) => Promise<any>;
   signUp: (formData: SignUp) => Promise<{ message: string; user: User }> | any;
@@ -65,11 +65,21 @@ export const createApiClient = (): ApiClient => {
       }
       return () => controller.abort();
     },
-    getBookById: async (bookId) => {
-      const res = await axios.get(`http://localhost:5000/books/${bookId}`, {
-        // params: Number(bookId),
-      });
-      return res.data;
+    getBookById: async (docId: string) => {
+      const controller = new AbortController();
+      try {
+        const docRef = doc(db, 'books', docId);
+        const document = await getDoc(docRef);
+        return document;
+      } catch (error) {
+        if (controller.signal.aborted) {
+          console.log('The request was cancelled:', controller.signal.reason);
+        } else {
+          console.log('There was a problem with getting the document.');
+          return error;
+        }
+      }
+      return () => controller.abort();
     },
     addBook: async (formData) => {
       const controller = new AbortController();
